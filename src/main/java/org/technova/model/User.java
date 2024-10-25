@@ -2,12 +2,12 @@ package org.technova.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.NonNull;
 
-import java.time.LocalDate;
+
 import java.time.LocalDateTime;
 
 @Entity
@@ -37,7 +37,7 @@ public class User
     @Column(name = "nationalite", nullable = false)
     private String nationalite;
 
-    @NotBlank(message = "La Date d'inscription est obligatoire")
+    @NotNull(message = "La Date d'inscription est obligatoire")
     @Column(name = "date_inscription", nullable = false)
     private LocalDateTime dateInscription;
 
