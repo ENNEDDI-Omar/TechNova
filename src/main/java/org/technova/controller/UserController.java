@@ -3,15 +3,16 @@ package org.technova.controller;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.AbstractController;
 import org.technova.model.User;
-import org.technova.service.UserService;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import org.technova.service.interfaces.UserService;  // Important : utilisez l'interface correcte
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import java.time.LocalDateTime;
 
 public class UserController extends AbstractController {
 
-    private UserService userService;
+    private UserService userService;  // Utilisez l'interface
 
+    // Setter pour l'injection
     public void setUserService(UserService userService) {
         this.userService = userService;
     }
