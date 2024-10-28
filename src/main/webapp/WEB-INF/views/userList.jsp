@@ -7,6 +7,10 @@
     <link href="${pageContext.request.contextPath}/resources/css/style.css" rel="stylesheet">
 </head>
 <body>
+<div class="nav-menu">
+    <a href="${pageContext.request.contextPath}/" class="nav-item">Accueil</a>
+    <a href="${pageContext.request.contextPath}/users" class="nav-item">Gestion des Utilisateurs</a>
+</div>
 <div class="container">
     <h1>Liste des Utilisateurs</h1>
     <a href="?action=add" class="btn btn-primary">Ajouter un Utilisateur</a>
