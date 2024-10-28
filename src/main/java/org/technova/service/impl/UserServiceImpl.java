@@ -6,27 +6,28 @@ import org.technova.service.interfaces.UserService;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class UserServiceImpl implements UserService {
 
     private UserRepository userRepository;
 
-    // Pour l'injection par constructeur
+    // Constructeur pour l'injection par constructeur
     public UserServiceImpl(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
 
-    // Pour l'injection par setter
+    // Setter pour l'injection par setter
     public void setUserRepository(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
 
-    // Pour l'injection par interface
+    // Setter pour l'injection par interface
     public void setRepository(UserRepository repository) {
         this.userRepository = repository;
     }
 
-    // Constructeur par défaut nécessaire pour Spring
+    // Constructeur par défaut pour Spring
     public UserServiceImpl() {}
 
     @Override
@@ -60,8 +61,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<User> getExpiredUsers(LocalDateTime date) {
-        return userRepository.findExpiredUsers(date);
+    public User getUserByPieceIdentite(String pieceIdentite) {
+        return userRepository.findByPieceIdentite(pieceIdentite);
     }
 
 }

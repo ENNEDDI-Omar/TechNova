@@ -1,28 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xmlns:tx="http://www.springframework.org/schema/tx"
        xmlns:context="http://www.springframework.org/schema/context"
-       xmlns:jpa="http://www.springframework.org/schema/data/jpa"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
        http://www.springframework.org/schema/beans/spring-beans.xsd
-       http://www.springframework.org/schema/tx
-       http://www.springframework.org/schema/tx/spring-tx.xsd
        http://www.springframework.org/schema/context
-       https://www.springframework.org/schema/context/spring-context.xsd
-       http://www.springframework.org/schema/data/jpa
-       https://www.springframework.org/schema/data/jpa/spring-jpa.xsd">
+       http://www.springframework.org/schema/context/spring-context.xsd">
 
     <!-- Chargement des propriétés -->
     <context:property-placeholder location="classpath:database.properties"/>
 
-    <!-- Configuration de la source de données -->
-    <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
-        <property name="driverClassName" value="${jdbc.driverClassName}"/>
-        <property name="url" value="${jdbc.url}"/>
-        <property name="username" value="${jdbc.username}"/>
-        <property name="password" value="${jdbc.password}"/>
-    </bean>
+    <!-- Import de la configuration Spring Data -->
+    <import resource="classpath:spring/spring-data.xml"/>
 
     <!-- Bean User Singleton -->
     <bean id="singletonUser" class="org.technova.model.User" scope="singleton">
@@ -34,51 +23,8 @@
         <property name="dateExpiration" value="#{T(java.time.LocalDateTime).now().plusYears(1)}"/>
     </bean>
 
-    <!-- Bean User en mode Prototype -->
-    <bean id="prototypeUser" class="org.technova.model.User" scope="prototype"/>
-
-    <!-- Configuration JPA -->
-    <bean id="entityManagerFactory"
-          class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
-        <property name="dataSource" ref="dataSource"/>
-        <property name="packagesToScan" value="org.technova.model"/>
-        <property name="jpaVendorAdapter">
-            <bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter">
-                <property name="showSql" value="${hibernate.show_sql}"/>
-                <property name="generateDdl" value="true"/>
-                <property name="database" value="POSTGRESQL"/>
-            </bean>
-        </property>
-        <property name="jpaProperties">
-            <props>
-                <prop key="hibernate.dialect">${hibernate.dialect}</prop>
-                <prop key="hibernate.hbm2ddl.auto">${hibernate.hbm2ddl.auto}</prop>
-                <prop key="hibernate.format_sql">${hibernate.format_sql}</prop>
-            </props>
-        </property>
-    </bean>
-
-    <!-- Transaction Manager -->
-    <bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
-        <property name="entityManagerFactory" ref="entityManagerFactory"/>
-    </bean>
-
-    <!-- Active Spring Data JPA repositories -->
-    <jpa:repositories base-package="org.technova.repository"/>
-
-    <!-- Active la gestion des transactions -->
-    <tx:annotation-driven transaction-manager="transactionManager"/>
-
-    <!-- Service avec les trois types d'injection -->
-    <bean id="userServiceConstructor" class="org.technova.service.impl.UserServiceImpl">
-        <constructor-arg ref="userRepository"/>
-    </bean>
-
-    <bean id="userServiceSetter" class="org.technova.service.impl.UserServiceImpl">
-        <property name="userRepository" ref="userRepository"/>
-    </bean>
-
+    <!-- Service avec injection par constructeur -->
     <bean id="userService" class="org.technova.service.impl.UserServiceImpl">
-        <property name="repository" ref="userRepository"/>
+        <constructor-arg ref="userRepository"/>
     </bean>
 </beans>
